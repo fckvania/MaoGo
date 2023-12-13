@@ -28,7 +28,7 @@ func (client *NewClientImpl) SendText(from types.JID, txt string, opts *waProto.
 	})
 }
 
-func (client *NewClientImpl) SendWithNewLester(from types.JID, text string, newjid string, newserver int32, name string, opts *waProto.ContextInfo) {
+func (client *NewClientImpl) SendWithNewsLestter(from types.JID, text string, newjid string, newserver int32, name string, opts *waProto.ContextInfo) {
 	client.SendText(from, text, &waProto.ContextInfo{
 		ForwardedNewsletterMessageInfo: &waProto.ForwardedNewsletterMessageInfo{
 			NewsletterJid:   proto.String(newjid),

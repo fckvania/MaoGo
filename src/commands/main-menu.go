@@ -33,10 +33,11 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 			} else {
 				prefix = ""
 			}
-			str += fmt.Sprintf("ゝ %s%s\n\n", prefix, e.Name)
+			str += fmt.Sprintf("ゝ %s%s\n", prefix, e.Name)
 		}
+		str += "\n"
 	}
-	client.SendWithNewLester(m.From, str, "120363202790562417@newsletter", 201, "My Name Mao", m.ContextInfo)
+	client.SendWithNewsLestter(m.From, str, "120363202790562417@newsletter", 100, "My Name Mao", m.ContextInfo)
 }
 
 func init() {
