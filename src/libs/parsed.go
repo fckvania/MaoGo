@@ -5,20 +5,9 @@ import (
 	"strings"
 
 	waProto "go.mau.fi/whatsmeow/binary/proto"
-	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
 	"google.golang.org/protobuf/proto"
 )
-
-type IMessage struct {
-	From        types.JID
-	PushName    string
-	IsOwner     bool
-	Querry      string
-	Reply       func(text string)
-	Command     string
-	ContextInfo *waProto.ContextInfo
-}
 
 func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	var command string

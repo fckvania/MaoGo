@@ -77,10 +77,6 @@ func main() {
 	client.Disconnect()
 }
 
-var (
-	command string
-)
-
 func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 	return func(evt interface{}) {
 		switch v := evt.(type) {
