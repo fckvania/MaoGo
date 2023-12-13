@@ -23,10 +23,16 @@ type IMessage struct {
 func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	var command string
 	var isOwner = false
-	if mess.Info.Sender.String() == os.Getenv("Owner_Number") {
-		isOwner = true
-	}
+	var owner []string
+	botNum, _ := sock.ParseJID(sock.WA.Store.ID.User)
+	owner = append(owner, os.Getenv("Owner_Number"))
+	owner = append(owner, botNum.String())
 
+	for _, own := range owner {
+		if own == mess.Info.Sender.String() {
+			isOwner = true
+		}
+	}
 	if pe := mess.Message.GetExtendedTextMessage().GetText(); pe != "" {
 		command = pe
 	} else if pe := mess.Message.GetConversation(); pe != "" {

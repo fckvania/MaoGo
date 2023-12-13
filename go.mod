@@ -7,6 +7,7 @@ require (
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.18 // indirect
 	github.com/mdp/qrterminal v1.0.1 // indirect
+	github.com/robertkrimen/otto v0.2.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.2.1 // indirect
@@ -17,5 +18,6 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.16.1 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
+	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 	rsc.io/qr v0.2.0 // indirect
 )
