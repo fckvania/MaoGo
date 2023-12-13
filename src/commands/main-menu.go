@@ -15,7 +15,7 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 	var str string
 	str += fmt.Sprintf("Hello %s, Berikut List Command Yang Tersedia\n\n", m.PushName)
 	var tags map[string][]item
-	for _, list := range libs.NewCommands().GetList() {
+	for _, list := range libs.GetList() {
 		if tags == nil {
 			tags = make(map[string][]item)
 		}
@@ -41,11 +41,10 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 }
 
 func init() {
-	handler := libs.ICommand{
+	libs.NewCommands(&libs.ICommand{
 		Name:     "menu",
 		Tags:     "main",
 		IsPrefix: true,
 		Exec:     menu,
-	}
-	libs.NewCommands().Add(&handler)
+	})
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	handler := libs.ICommand{
+	libs.NewCommands(&libs.ICommand{
 		Name:     "$",
 		Tags:     "owner",
 		IsPrefix: false,
@@ -20,6 +20,5 @@ func init() {
 			}
 			m.Reply(string(out))
 		},
-	}
-	libs.NewCommands().Add(&handler)
+	})
 }

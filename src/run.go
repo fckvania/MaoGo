@@ -86,7 +86,7 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 		switch v := evt.(type) {
 		case *events.Message:
 			sock := libs.NewClient(client)
-			go libs.NewCommands().Get(sock, libs.NewSmsg(v, sock))
+			go libs.Get(sock, libs.NewSmsg(v, sock))
 			return
 		}
 	}

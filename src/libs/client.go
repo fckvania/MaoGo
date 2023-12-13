@@ -10,10 +10,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type NewClientImpl struct {
-	WA *whatsmeow.Client
-}
-
 func NewClient(client *whatsmeow.Client) *NewClientImpl {
 	return &NewClientImpl{
 		WA: client,
