@@ -31,7 +31,6 @@ type IMessage struct {
 	Sender        types.JID
 	PushName      string
 	IsOwner       bool
-	IsAdmin       bool
 	IsGroup       bool
 	Querry        string
 	Command       string
