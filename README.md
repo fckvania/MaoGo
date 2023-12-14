@@ -11,13 +11,6 @@
 <br><br>
 <p>MaoGo adalah Bot WhatsApp yang dibuat menggunakan Golang dan package <a href="https://github.com/tulir/whatsmeow" target="_blank">whatsmeow</a>.</p><br>
 
-## Fitur
-
-- **#menu**: Menampilkan menu.
-- **#ping**: Membalas dengan pong.
-- **#ci**: Mendapatkan informasi channel melalui link atau ID.
-- **#sticker**: Membuat stiker dari foto dan video.
-- **$**: Menjalankan kode bash (hanya owner).
 
 ## Cara Penggunaan Dan Penginstalan
 
