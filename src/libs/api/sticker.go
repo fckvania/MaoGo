@@ -38,10 +38,6 @@ type sApi struct {
 	Build func() []byte
 }
 
-type hreq struct {
-	WebpBase64 string
-}
-
 func StickerApi(s *Sticker, d *MetadataSticker) *sApi {
 	return &sApi{
 		Build: func() []byte {
