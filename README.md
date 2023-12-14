@@ -20,10 +20,11 @@
 5. **Langkah 4:** Jalankan bot dengan perintah:
 ```shell
 cd MaoGo
-go run src/run.go
+go run src/mao.go
 # atau
-go build src/run.go
-./run
+go build src/mao.go
+./mao #for linux
+mao.exe #for windows
 ```
 7. **Langkah 5:** Buka WhatsApp dan scan QR yang muncul di log.
 
