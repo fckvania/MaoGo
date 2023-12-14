@@ -54,11 +54,29 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 
 	return &IMessage{
 		From:     mess.Info.Chat,
+		Sender:   mess.Info.Sender,
 		PushName: mess.Info.PushName,
 		IsOwner:  isOwner,
+		IsBot:    mess.Info.IsFromMe,
+		IsGroup:  mess.Info.IsGroup,
 		Querry:   strings.Join(strings.Split(command, " ")[1:], ` `),
 		Command:  strings.Split(command, " ")[0],
 		Media:    media,
+		IsAdmin: func() bool {
+			if !mess.Info.IsGroup {
+				return false
+			}
+			admin, err := sock.FetchGroupAdmin(mess.Info.Chat)
+			if err != nil {
+				return false
+			}
+			for _, v := range admin {
+				if v == mess.Info.Sender.String() {
+					return true
+				}
+			}
+			return false
+		}(),
 		IsImage: func() bool {
 			if mess.Message.GetImageMessage() != nil {
 				return true

@@ -7,7 +7,7 @@ import (
 )
 
 type item struct {
-	Name     string
+	Name     []string
 	IsPrefix bool
 }
 
@@ -22,7 +22,7 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 		if _, ok := tags[list.Tags]; !ok {
 			tags[list.Tags] = []item{}
 		}
-		tags[list.Tags] = append(tags[list.Tags], item{Name: list.Name, IsPrefix: list.IsPrefix})
+		tags[list.Tags] = append(tags[list.Tags], item{Name: list.As, IsPrefix: list.IsPrefix})
 	}
 	for key := range tags {
 		str += fmt.Sprintf(" *%s*\n", strings.ToUpper(key))
@@ -33,7 +33,9 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 			} else {
 				prefix = ""
 			}
-			str += fmt.Sprintf("ゝ %s%s\n", prefix, e.Name)
+			for _, nm := range e.Name {
+				str += fmt.Sprintf("ゝ %s%s\n", prefix, nm)
+			}
 		}
 		str += "\n"
 	}
@@ -43,6 +45,7 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 func init() {
 	libs.NewCommands(&libs.ICommand{
 		Name:     "menu",
+		As:       []string{"menu"},
 		Tags:     "main",
 		IsPrefix: true,
 		Exec:     menu,

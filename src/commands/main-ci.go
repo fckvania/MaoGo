@@ -7,7 +7,8 @@ import (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "ci",
+		Name:     "(channelinfo|ci)",
+		As:       []string{"ci"},
 		Tags:     "main",
 		IsPrefix: true,
 		IsQuerry: true,

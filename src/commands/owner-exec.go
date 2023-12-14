@@ -8,7 +8,8 @@ import (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "$",
+		Name:     `\$`,
+		As:       []string{"$"},
 		Tags:     "owner",
 		IsPrefix: false,
 		IsOwner:  true,

@@ -15,7 +15,8 @@ import (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "sticker",
+		Name:     "(s|sticker)",
+		As:       []string{"sticker"},
 		Tags:     "convert",
 		IsPrefix: true,
 		IsMedia:  true,

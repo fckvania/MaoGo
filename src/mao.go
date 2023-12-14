@@ -22,6 +22,8 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+var self bool = true
+
 func init() {
 	gotenv.Load()
 	store.DeviceProps.PlatformType = waProto.DeviceProps_SAFARI.Enum()
@@ -54,11 +56,16 @@ func main() {
 			panic(err)
 		}
 		for evt := range qrChan {
-			if evt.Event == "code" {
+			switch string(evt.Event) {
+			case "code":
 				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
 				log.Info("Qr Required")
-			} else {
+				break
+			case "success":
+				log.Info("Connected Socket")
+				break
 			}
+
 		}
 	} else {
 		// Already logged in, just connect
@@ -82,7 +89,11 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 		switch v := evt.(type) {
 		case *events.Message:
 			sock := libs.NewClient(client)
-			go libs.Get(sock, libs.NewSmsg(v, sock))
+			m := libs.NewSmsg(v, sock)
+			if self && !m.IsOwner {
+				return
+			}
+			go libs.Get(sock, m)
 			return
 		}
 	}

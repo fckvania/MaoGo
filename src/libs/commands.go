@@ -1,6 +1,7 @@
 package libs
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -17,7 +18,8 @@ func GetList() []ICommand {
 func Get(c *NewClientImpl, m *IMessage) {
 	prefix := "#"
 	for _, cmd := range lists {
-		if cmd.Name == strings.ReplaceAll(m.Command, prefix, "") {
+		re := regexp.MustCompile(`^` + cmd.Name + `$`)
+		if reg := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; reg {
 			var cmdWithPref bool
 			var cmdWithoutPref bool
 
@@ -49,6 +51,16 @@ func Get(c *NewClientImpl, m *IMessage) {
 
 			if cmd.IsQuerry && m.Querry == "" {
 				m.Reply("Querry Di Butuhkan")
+				continue
+			}
+
+			if cmd.IsGroup && !m.IsGroup {
+				m.Reply("Hanya Khusus Group")
+				continue
+			}
+
+			if cmd.IsAdmin && !m.IsAdmin {
+				m.Reply("Akses Admin Di Butuhkan.")
 				continue
 			}
 
