@@ -1,7 +1,7 @@
 # MaoGo
 
 <div align="center">
-  <img src="/logo.jpg" width="30%" alt="Logo Mao"><br>
+  <img src="./static/logo.jpg" width="30%" alt="Logo Mao"><br>
   <a href="#"><img alt="MaoGo" src="https://img.shields.io/badge/MaoGo-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a><br>
   <a href="https://github.com/fckvania/MaoGo/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/fckvania/MaoGo?style=flat-square"></a>
   <a href="https://github.com/fckvania/MaoGo/network/members"><img alt="Forks" src="https://img.shields.io/github/forks/fckvania/MaoGo?style=flat-square"></a>
