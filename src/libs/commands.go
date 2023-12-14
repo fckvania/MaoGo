@@ -59,7 +59,7 @@ func Get(c *NewClientImpl, m *IMessage) {
 				continue
 			}
 
-			if cmd.IsAdmin && !m.IsAdmin {
+			if cmd.IsAdmin && (m.IsGroup && !m.IsAdmin) {
 				m.Reply("Akses Admin Di Butuhkan.")
 				continue
 			}
