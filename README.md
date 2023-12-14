@@ -46,4 +46,4 @@ Jika Anda ingin berkontribusi pada pengembangan bot ini, berikut adalah langkah-
 
 ## Lisensi
 
-@TODO
+[GPL-3.0 license](/LICENSE)
