@@ -37,7 +37,18 @@ func Get(c *NewClientImpl, m *IMessage) {
 				continue
 			}
 
+			//Checking
 			if cmd.IsOwner && !m.IsOwner {
+				continue
+			}
+
+			if cmd.IsMedia && m.Media == nil {
+				m.Reply("Media Di Butuhkan")
+				continue
+			}
+
+			if cmd.IsQuerry && m.Querry == "" {
+				m.Reply("Querry Di Butuhkan")
 				continue
 			}
 

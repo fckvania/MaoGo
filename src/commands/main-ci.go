@@ -10,9 +10,11 @@ func init() {
 		Name:     "ci",
 		Tags:     "main",
 		IsPrefix: true,
+		IsQuerry: true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			key, err := client.WA.GetNewsletterInfoWithInvite(m.Querry)
 			if err != nil {
+				m.Reply("Mao Tidak Tau Ya.")
 				return
 			}
 

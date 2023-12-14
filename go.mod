@@ -10,7 +10,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.2.1 // indirect
-	go.mau.fi/whatsmeow v0.0.0-20231207185345-3d38622a64be // indirect
+	go.mau.fi/whatsmeow v0.0.0-20231213182926-f17761e0fe8d // indirect
 	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.19.0 // indirect

@@ -16,15 +16,22 @@ type ICommand struct {
 	Tags        string
 	IsPrefix    bool
 	IsOwner     bool
+	IsMedia     bool
+	IsQuerry    bool
 	Exec        func(client *NewClientImpl, m *IMessage)
 }
 
 type IMessage struct {
-	From        types.JID
-	PushName    string
-	IsOwner     bool
-	Querry      string
-	Reply       func(text string)
-	Command     string
-	ContextInfo *waProto.ContextInfo
+	From          types.JID
+	PushName      string
+	IsOwner       bool
+	Querry        string
+	Command       string
+	IsImage       bool
+	IsVideo       bool
+	IsQuotedImage bool
+	IsQuotedVideo bool
+	Media         whatsmeow.DownloadableMessage
+	ContextInfo   *waProto.ContextInfo
+	Reply         func(text string)
 }
