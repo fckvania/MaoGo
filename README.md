@@ -24,7 +24,7 @@ cd MaoGo
 # install dependencies
 go get all 
 # atau
-cd src && go get
+go get ./src
 # jalankan bot
 go run src/mao.go
 # atau
