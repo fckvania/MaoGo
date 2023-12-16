@@ -9,7 +9,7 @@
 </div>
 
 <br><br>
-<p>MaoGo adalah Bot WhatsApp yang dibuat menggunakan Golang dan package <a href="https://github.com/tulir/whatsmeow" target="_blank">whatsmeow</a>.</p><br>
+> <p>MaoGo adalah Bot WhatsApp yang dibuat menggunakan Golang dan package <a href="https://github.com/tulir/whatsmeow" target="_blank">whatsmeow</a>.</p><br>
 
 
 ## Cara Penggunaan Dan Penginstalan
