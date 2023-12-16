@@ -18,6 +18,7 @@ import (
 	waProto "go.mau.fi/whatsmeow/binary/proto"
 	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/store/sqlstore"
+	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
 	"google.golang.org/protobuf/proto"
@@ -49,6 +50,11 @@ func main() {
 	log.Info("Connecting Socket")
 	client.AddEventHandler(handler)
 
+	client.PrePairCallback = func(jid types.JID, platform, businessName string) bool {
+		log.Info("Connected Socket")
+		return true
+	}
+
 	if client.Store.ID == nil {
 		// No ID stored, new login
 
@@ -71,7 +77,6 @@ func main() {
 			}
 
 			fmt.Println("Code Kamu : " + code)
-			log.Info("Connected Socket")
 			break
 		case 2:
 			qrChan, _ := client.GetQRChannel(context.Background())
@@ -120,6 +125,13 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 			}
 			go libs.Get(sock, m)
 			return
+		case *events.LoggedOut:
+			con := evt.(*events.LoggedOut)
+			if !con.OnConnect {
+				fmt.Println(client.Store.ID.User)
+				log.Info("LogOut Reason : " + con.Reason.String())
+				panic("Log Out")
+			}
 		}
 	}
 }
