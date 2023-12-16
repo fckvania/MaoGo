@@ -16,14 +16,18 @@ func GetList() []ICommand {
 }
 
 func Get(c *NewClientImpl, m *IMessage) {
-	prefix := "#"
+	var prefix string
+	pattern := regexp.MustCompile(`[?!.#]`)
+	for _, f := range pattern.FindAllString(m.Command, -1) {
+		prefix = f
+	}
 	for _, cmd := range lists {
 		re := regexp.MustCompile(`^` + cmd.Name + `$`)
 		if reg := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; reg {
 			var cmdWithPref bool
 			var cmdWithoutPref bool
 
-			if cmd.IsPrefix && strings.HasPrefix(m.Command, prefix) {
+			if cmd.IsPrefix && (prefix != "" && strings.HasPrefix(m.Command, prefix)) {
 				cmdWithPref = true
 			} else {
 				cmdWithPref = false
@@ -57,6 +61,10 @@ func Get(c *NewClientImpl, m *IMessage) {
 			if cmd.IsGroup && !m.IsGroup {
 				m.Reply("Hanya Khusus Group")
 				continue
+			}
+
+			if cmd.IsWaitt {
+				m.Reply("Tunggu Sebentar Ya")
 			}
 
 			cmd.Exec(c, m)

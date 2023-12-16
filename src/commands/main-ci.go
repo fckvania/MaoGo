@@ -3,6 +3,8 @@ package commands
 import (
 	"fmt"
 	"mao/src/libs"
+	"regexp"
+	"strings"
 )
 
 func init() {
@@ -13,13 +15,18 @@ func init() {
 		IsPrefix: true,
 		IsQuerry: true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
-			key, err := client.WA.GetNewsletterInfoWithInvite(m.Querry)
+			pattern := regexp.MustCompile(`https?://whatsapp.com/channel/`)
+			if !pattern.MatchString(m.Querry) {
+				m.Reply("Url Invalid")
+				return
+			}
+			key, err := client.WA.GetNewsletterInfoWithInvite(strings.Split(m.Querry, "/")[4])
 			if err != nil {
 				m.Reply("Mao Tidak Tau Ya.")
 				return
 			}
 
-			m.Reply(fmt.Sprintf("Channel Information\nLink: %s\nID: %s\nName: %v\nFollowers: %v\n\nDescription: %v\nCreate At: %v", m.Querry, key.ID, key.ThreadMeta.Name.Text, key.ThreadMeta.SubscriberCount, key.ThreadMeta.Description.Text, key.ThreadMeta.CreationTime))
+			m.Reply(fmt.Sprintf("*Channel Information*\n*Link:* %s\n*ID:* %s\n*Name:* %v\n*Followers:* %v\n\n*Description:* %v\n*Create At:* %v", m.Querry, key.ID, key.ThreadMeta.Name.Text, key.ThreadMeta.SubscriberCount, key.ThreadMeta.Description.Text, key.ThreadMeta.CreationTime))
 		},
 	})
 }

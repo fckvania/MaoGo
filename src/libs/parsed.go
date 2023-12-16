@@ -53,15 +53,16 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	}
 
 	return &IMessage{
-		From:     mess.Info.Chat,
-		Sender:   mess.Info.Sender,
-		PushName: mess.Info.PushName,
-		IsOwner:  isOwner,
-		IsBot:    mess.Info.IsFromMe,
-		IsGroup:  mess.Info.IsGroup,
-		Querry:   strings.Join(strings.Split(command, " ")[1:], ` `),
-		Command:  strings.Split(command, " ")[0],
-		Media:    media,
+		From:        mess.Info.Chat,
+		Sender:      mess.Info.Sender,
+		PushName:    mess.Info.PushName,
+		OwnerNumber: owner,
+		IsOwner:     isOwner,
+		IsBot:       mess.Info.IsFromMe,
+		IsGroup:     mess.Info.IsGroup,
+		Querry:      strings.Join(strings.Split(command, " ")[1:], ` `),
+		Command:     strings.Split(command, " ")[0],
+		Media:       media,
 		IsImage: func() bool {
 			if mess.Message.GetImageMessage() != nil {
 				return true

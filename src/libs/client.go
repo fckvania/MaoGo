@@ -2,6 +2,9 @@ package libs
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strings"
 
 	"go.mau.fi/whatsmeow"
@@ -41,6 +44,79 @@ func (client *NewClientImpl) SendWithNewsLestter(from types.JID, text string, ne
 	})
 }
 
+func (client *NewClientImpl) SendImage(from types.JID, data []byte, caption string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+	uploaded, err := client.WA.Upload(context.Background(), data, whatsmeow.MediaImage)
+	if err != nil {
+		fmt.Printf("Failed to upload file: %v\n", err)
+		return whatsmeow.SendResponse{}, err
+	}
+	resultImg := &waProto.Message{
+		ImageMessage: &waProto.ImageMessage{
+			Url:           proto.String(uploaded.URL),
+			DirectPath:    proto.String(uploaded.DirectPath),
+			MediaKey:      uploaded.MediaKey,
+			Caption:       proto.String(caption),
+			Mimetype:      proto.String(http.DetectContentType(data)),
+			FileEncSha256: uploaded.FileEncSHA256,
+			FileSha256:    uploaded.FileSHA256,
+			FileLength:    proto.Uint64(uint64(len(data))),
+			ContextInfo:   opts,
+		},
+	}
+	ok, _ := client.WA.SendMessage(context.Background(), from, resultImg)
+	return ok, nil
+}
+
+func (client *NewClientImpl) SendVideo(from types.JID, data []byte, caption string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+	uploaded, err := client.WA.Upload(context.Background(), data, whatsmeow.MediaVideo)
+	if err != nil {
+		fmt.Printf("Failed to upload file: %v\n", err)
+		return whatsmeow.SendResponse{}, err
+	}
+	resultVideo := &waProto.Message{
+		VideoMessage: &waProto.VideoMessage{
+			Url:           proto.String(uploaded.URL),
+			DirectPath:    proto.String(uploaded.DirectPath),
+			MediaKey:      uploaded.MediaKey,
+			Caption:       proto.String(caption),
+			Mimetype:      proto.String(http.DetectContentType(data)),
+			FileEncSha256: uploaded.FileEncSHA256,
+			FileSha256:    uploaded.FileSHA256,
+			FileLength:    proto.Uint64(uint64(len(data))),
+			ContextInfo:   opts,
+		},
+	}
+	ok, er := client.WA.SendMessage(context.Background(), from, resultVideo)
+	if er != nil {
+		return whatsmeow.SendResponse{}, er
+	}
+	return ok, nil
+}
+
+func (client *NewClientImpl) SendDocument(from types.JID, data []byte, fileName string, caption string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+	uploaded, err := client.WA.Upload(context.Background(), data, whatsmeow.MediaDocument)
+	if err != nil {
+		fmt.Printf("Failed to upload file: %v\n", err)
+		return whatsmeow.SendResponse{}, err
+	}
+	resultDoc := &waProto.Message{
+		DocumentMessage: &waProto.DocumentMessage{
+			Url:           proto.String(uploaded.URL),
+			DirectPath:    proto.String(uploaded.DirectPath),
+			MediaKey:      uploaded.MediaKey,
+			FileName:      proto.String(fileName),
+			Caption:       proto.String(caption),
+			Mimetype:      proto.String(http.DetectContentType(data)),
+			FileEncSha256: uploaded.FileEncSHA256,
+			FileSha256:    uploaded.FileSHA256,
+			FileLength:    proto.Uint64(uint64(len(data))),
+			ContextInfo:   opts,
+		},
+	}
+	ok, _ := client.WA.SendMessage(context.Background(), from, resultDoc)
+	return ok, nil
+}
+
 func (client *NewClientImpl) ParseJID(arg string) (types.JID, bool) {
 	if arg[0] == '+' {
 		arg = arg[1:]
@@ -71,4 +147,38 @@ func (client *NewClientImpl) FetchGroupAdmin(Jid types.JID) ([]string, error) {
 		}
 	}
 	return Admin, err
+}
+
+func (client *NewClientImpl) SendSticker(jid types.JID, data []byte, opts *waProto.ContextInfo) {
+	uploaded, err := client.WA.Upload(context.Background(), data, whatsmeow.MediaImage)
+	if err != nil {
+		fmt.Printf("Failed to upload file: %v\n", err)
+	}
+
+	client.WA.SendMessage(context.Background(), jid, &waProto.Message{
+		StickerMessage: &waProto.StickerMessage{
+			Url:           proto.String(uploaded.URL),
+			DirectPath:    proto.String(uploaded.DirectPath),
+			MediaKey:      uploaded.MediaKey,
+			Mimetype:      proto.String(http.DetectContentType(data)),
+			FileEncSha256: uploaded.FileEncSHA256,
+			FileSha256:    uploaded.FileSHA256,
+			FileLength:    proto.Uint64(uint64(len(data))),
+			ContextInfo:   opts,
+		},
+	})
+}
+
+func (client *NewClientImpl) GetBytes(url string) []byte {
+	resp, err := http.Get(url)
+	if err != nil {
+		panic(err)
+	}
+
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	return bytes
 }

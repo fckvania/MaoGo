@@ -21,6 +21,7 @@ type ICommand struct {
 	IsQuerry    bool
 	IsGroup     bool
 	IsAdmin     bool
+	IsWaitt     bool
 	After       func(client *NewClientImpl, m *IMessage)
 	Exec        func(client *NewClientImpl, m *IMessage)
 }
@@ -29,6 +30,7 @@ type IMessage struct {
 	From          types.JID
 	IsBot         bool
 	Sender        types.JID
+	OwnerNumber   []string
 	PushName      string
 	IsOwner       bool
 	IsGroup       bool

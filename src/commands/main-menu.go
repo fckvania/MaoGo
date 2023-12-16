@@ -29,7 +29,7 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 		for _, e := range tags[key] {
 			var prefix string
 			if e.IsPrefix {
-				prefix = "#"
+				prefix = m.Command[:1]
 			} else {
 				prefix = ""
 			}
