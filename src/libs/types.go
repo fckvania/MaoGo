@@ -35,6 +35,7 @@ type IMessage struct {
 	IsOwner       bool
 	IsGroup       bool
 	Querry        string
+	Body          string
 	Command       string
 	IsImage       bool
 	IsVideo       bool

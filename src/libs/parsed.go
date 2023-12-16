@@ -51,6 +51,7 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	} else {
 		media = nil
 	}
+
 	return &IMessage{
 		From:        mess.Info.Chat,
 		Sender:      mess.Info.Sender,
@@ -60,6 +61,7 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		IsBot:       mess.Info.IsFromMe,
 		IsGroup:     mess.Info.IsGroup,
 		Querry:      strings.Join(strings.Split(command, " ")[1:], ` `),
+		Body:        command,
 		Command:     strings.Split(command, " ")[0],
 		Media:       media,
 		IsImage: func() bool {

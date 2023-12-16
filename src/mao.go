@@ -24,7 +24,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var self bool = true
+var Self bool = true
 
 func init() {
 	gotenv.Load()
@@ -57,7 +57,7 @@ func main() {
 
 	if client.Store.ID == nil {
 		// No ID stored, new login
-
+		// Switch Mode
 		switch int(questLogin()) {
 		case 1:
 			fmt.Print("Masukan Nomor (628xx) : ")
@@ -120,7 +120,7 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 		case *events.Message:
 			sock := libs.NewClient(client)
 			m := libs.NewSmsg(v, sock)
-			if self && !m.IsOwner {
+			if Self && !m.IsOwner {
 				return
 			}
 			go libs.Get(sock, m)
