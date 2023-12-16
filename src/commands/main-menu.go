@@ -3,12 +3,27 @@ package commands
 import (
 	"fmt"
 	"mao/src/libs"
+	"sort"
 	"strings"
 )
 
 type item struct {
 	Name     []string
 	IsPrefix bool
+}
+
+type tagSlice []string
+
+func (t tagSlice) Len() int {
+	return len(t)
+}
+
+func (t tagSlice) Less(i int, j int) bool {
+	return t[i] < t[j]
+}
+
+func (t tagSlice) Swap(i int, j int) {
+	t[i], t[j] = t[j], t[i]
 }
 
 func menu(client *libs.NewClientImpl, m *libs.IMessage) {
@@ -24,7 +39,15 @@ func menu(client *libs.NewClientImpl, m *libs.IMessage) {
 		}
 		tags[list.Tags] = append(tags[list.Tags], item{Name: list.As, IsPrefix: list.IsPrefix})
 	}
+
+	var keys tagSlice
 	for key := range tags {
+		keys = append(keys, key)
+	}
+
+	sort.Sort(keys)
+
+	for _, key := range keys {
 		str += fmt.Sprintf(" *%s*\n", strings.ToUpper(key))
 		for _, e := range tags[key] {
 			var prefix string

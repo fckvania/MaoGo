@@ -22,6 +22,9 @@ func Get(c *NewClientImpl, m *IMessage) {
 		prefix = f
 	}
 	for _, cmd := range lists {
+		if cmd.After != nil {
+			cmd.After(c, m)
+		}
 		re := regexp.MustCompile(`^` + cmd.Name + `$`)
 		if reg := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; reg {
 			var cmdWithPref bool
@@ -60,6 +63,11 @@ func Get(c *NewClientImpl, m *IMessage) {
 
 			if cmd.IsGroup && !m.IsGroup {
 				m.Reply("Hanya Khusus Group")
+				continue
+			}
+
+			if (m.IsGroup && cmd.IsAdmin) && !m.IsAdmin {
+				m.Reply("Hanya Khusus Admin")
 				continue
 			}
 

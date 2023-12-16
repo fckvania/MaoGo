@@ -51,7 +51,6 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	} else {
 		media = nil
 	}
-
 	return &IMessage{
 		From:        mess.Info.Chat,
 		Sender:      mess.Info.Sender,
@@ -69,6 +68,21 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 			} else {
 				return false
 			}
+		}(),
+		IsAdmin: func() bool {
+			if !mess.Info.IsGroup {
+				return false
+			}
+			admin, err := sock.FetchGroupAdmin(mess.Info.Chat)
+			if err != nil {
+				return false
+			}
+			for _, v := range admin {
+				if v == mess.Info.Sender.String() {
+					return true
+				}
+			}
+			return false
 		}(),
 		ContextInfo: &waProto.ContextInfo{
 			StanzaId:      &mess.Info.ID,

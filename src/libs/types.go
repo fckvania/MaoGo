@@ -40,6 +40,7 @@ type IMessage struct {
 	IsVideo       bool
 	IsQuotedImage bool
 	IsQuotedVideo bool
+	IsAdmin       bool
 	Media         whatsmeow.DownloadableMessage
 	ContextInfo   *waProto.ContextInfo
 	Reply         func(text string)

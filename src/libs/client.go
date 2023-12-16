@@ -19,17 +19,21 @@ func NewClient(client *whatsmeow.Client) *NewClientImpl {
 	}
 }
 
-func (client *NewClientImpl) SendText(from types.JID, txt string, opts *waProto.ContextInfo) {
-	client.WA.SendMessage(context.Background(), from, &waProto.Message{
+func (client *NewClientImpl) SendText(from types.JID, txt string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+	ok, er := client.WA.SendMessage(context.Background(), from, &waProto.Message{
 		ExtendedTextMessage: &waProto.ExtendedTextMessage{
 			Text:        proto.String(txt),
 			ContextInfo: opts,
 		},
 	})
+	if er != nil {
+		return whatsmeow.SendResponse{}, er
+	}
+	return ok, nil
 }
 
-func (client *NewClientImpl) SendWithNewsLestter(from types.JID, text string, newjid string, newserver int32, name string, opts *waProto.ContextInfo) {
-	client.SendText(from, text, &waProto.ContextInfo{
+func (client *NewClientImpl) SendWithNewsLestter(from types.JID, text string, newjid string, newserver int32, name string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+	ok, er := client.SendText(from, text, &waProto.ContextInfo{
 		ForwardedNewsletterMessageInfo: &waProto.ForwardedNewsletterMessageInfo{
 			NewsletterJid:     proto.String(newjid),
 			NewsletterName:    proto.String(name),
@@ -42,6 +46,11 @@ func (client *NewClientImpl) SendWithNewsLestter(from types.JID, text string, ne
 		Participant:   opts.Participant,
 		QuotedMessage: opts.QuotedMessage,
 	})
+
+	if er != nil {
+		return whatsmeow.SendResponse{}, er
+	}
+	return ok, nil
 }
 
 func (client *NewClientImpl) SendImage(from types.JID, data []byte, caption string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
@@ -113,7 +122,10 @@ func (client *NewClientImpl) SendDocument(from types.JID, data []byte, fileName 
 			ContextInfo:   opts,
 		},
 	}
-	ok, _ := client.WA.SendMessage(context.Background(), from, resultDoc)
+	ok, er := client.WA.SendMessage(context.Background(), from, resultDoc)
+	if er != nil {
+		return whatsmeow.SendResponse{}, er
+	}
 	return ok, nil
 }
 
