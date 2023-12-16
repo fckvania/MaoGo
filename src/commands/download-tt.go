@@ -16,6 +16,7 @@ func init() {
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			url, err := api.GetTiktokVideo(m.Querry)
 			if err != nil {
+				m.Reply(err.Error())
 				return
 			}
 

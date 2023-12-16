@@ -1,12 +1,23 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
+var tiktokRegexp = regexp.MustCompile(`(https:\/\/vt\.tiktok\.com\/[A-Za-z0-9]+\/)|(https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/[0-9]+)`)
+
+func isTiktokUrl(url string) bool {
+	return tiktokRegexp.MatchString(url)
+}
+
 func GetTiktokVideo(url string) (string, error) {
+	if !isTiktokUrl(url) {
+		return "", errors.New("Url Invalid")
+	}
 	client := &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
