@@ -89,9 +89,6 @@ func main() {
 					qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
 					log.Info("Qr Required")
 					break
-				case "success":
-					log.Info("Connected Socket")
-					break
 				}
 			}
 			break

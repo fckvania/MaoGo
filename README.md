@@ -22,7 +22,9 @@
 # masuk ke direktori bot
 cd MaoGo
 # install dependencies
-go get all
+go get all 
+# atau
+cd src && go get
 # jalankan bot
 go run src/mao.go
 # atau
