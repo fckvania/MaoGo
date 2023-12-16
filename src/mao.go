@@ -132,6 +132,12 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 				log.Info("LogOut Reason : " + con.Reason.String())
 				panic("Log Out")
 			}
+			break
+		case *events.Connected, *events.PushNameSetting:
+			if len(client.Store.PushName) == 0 {
+				return
+			}
+			client.SendPresence(types.PresenceAvailable)
 		}
 	}
 }
