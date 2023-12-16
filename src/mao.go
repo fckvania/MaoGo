@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"mao/src/helpers"
 	"mao/src/libs"
 	"os"
@@ -22,7 +23,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var self bool = false
+var self bool = true
 
 func init() {
 	gotenv.Load()
@@ -44,33 +45,57 @@ func main() {
 	}
 	clientLog := waLog.Stdout("Client", "ERROR", true)
 	client := whatsmeow.NewClient(deviceStore, clientLog)
-	log.Info("Connecting Socket")
 	handler := registerHandler(client)
+	log.Info("Connecting Socket")
 	client.AddEventHandler(handler)
 
 	if client.Store.ID == nil {
 		// No ID stored, new login
-		qrChan, _ := client.GetQRChannel(context.Background())
-		err = client.Connect()
-		if err != nil {
-			panic(err)
-		}
-		for evt := range qrChan {
-			switch string(evt.Event) {
-			case "code":
-				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
-				log.Info("Qr Required")
-				break
-			case "success":
-				log.Info("Connected Socket")
-				break
+
+		switch int(questLogin()) {
+		case 1:
+			fmt.Print("Masukan Nomor (628xx) : ")
+			var nomor string
+			_, err := fmt.Scanln(&nomor)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
 			}
 
+			if err := client.Connect(); err != nil {
+				panic(err)
+			}
+
+			code, err := client.PairPhone(nomor, true, whatsmeow.PairClientChrome, "Chrome (Linux)")
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println("Code Kamu : " + code)
+			log.Info("Connected Socket")
+			break
+		case 2:
+			qrChan, _ := client.GetQRChannel(context.Background())
+			if err := client.Connect(); err != nil {
+				panic(err)
+			}
+			for evt := range qrChan {
+				switch string(evt.Event) {
+				case "code":
+					qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
+					log.Info("Qr Required")
+					break
+				case "success":
+					log.Info("Connected Socket")
+					break
+				}
+			}
+			break
+		default:
+			panic("Pilih apa?")
 		}
 	} else {
 		// Already logged in, just connect
-		err = client.Connect()
-		if err != nil {
+		if err := client.Connect(); err != nil {
 			panic(err)
 		}
 		log.Info("Connected Socket")
@@ -97,4 +122,19 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 			return
 		}
 	}
+}
+
+func questLogin() int {
+	fmt.Println("Silahlan Pilih Opsi Login :")
+	fmt.Println("1. Pairing Code")
+	fmt.Println("2. Qr")
+	fmt.Print("Pilih : ")
+	var input int
+	_, err := fmt.Scanln(&input)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 0
+	}
+
+	return input
 }
