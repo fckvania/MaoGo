@@ -32,9 +32,19 @@ func init() {
 			caption := fmt.Sprintf("*Title*: %s\n*Author*: %s", yt.Info.Title, yt.Info.Author)
 
 			if reg, _ := regexp.MatchString(`(ytmp3)`, m.Command); reg {
-				client.SendDocument(m.From, client.GetBytes(yt.Link.Audio[0].Url()), fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ContextInfo)
+				build, err := yt.Link.Audio[0].Url()
+				if err != nil {
+					m.Reply(err.Error())
+					return
+				}
+				client.SendDocument(m.From, client.GetBytes(build), fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ContextInfo)
 			} else {
-				client.SendVideo(m.From, client.GetBytes(yt.Link.Video[0].Url()), caption, m.ContextInfo)
+				build, err := yt.Link.Video[0].Url()
+				if err != nil {
+					m.Reply(err.Error())
+					return
+				}
+				client.SendVideo(m.From, client.GetBytes(build), caption, m.ContextInfo)
 			}
 		},
 	})

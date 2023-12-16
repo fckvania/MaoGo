@@ -11,7 +11,7 @@ type YoutubeAV struct {
 	Size    string
 	Format  string
 	Quality string
-	Url     func() string
+	Url     func() (string, error)
 }
 
 type YoutubeLinks struct {

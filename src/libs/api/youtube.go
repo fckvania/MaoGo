@@ -72,7 +72,7 @@ func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
 			Size:    a["size"].(string),
 			Format:  a["f"].(string),
 			Quality: a["q"].(string),
-			Url: func() string {
+			Url: func() (string, error) {
 				return Download(data["vid"].(string), a["k"].(string))
 			},
 		})
@@ -87,7 +87,7 @@ func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
 			Size:    a["size"].(string),
 			Format:  a["f"].(string),
 			Quality: a["q"].(string),
-			Url: func() string {
+			Url: func() (string, error) {
 				return Download(data["vid"].(string), a["k"].(string))
 			},
 		})
@@ -99,14 +99,14 @@ func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
 	}, nil
 }
 
-func Download(id string, k string) string {
+func Download(id string, k string) (string, error) {
 	params := url.Values{}
 	params.Add("vid", id)
 	params.Add("k", k)
 
 	req, err := http.PostForm("https://yt1s.com/api/ajaxConvert/convert", params)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	req.Header.Set("User-Agent", "WhatsApp/2.2353.59")
@@ -115,18 +115,18 @@ func Download(id string, k string) string {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	var data map[string]interface{}
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	if data["dlink"] == nil {
-		return ""
+		return "", errors.New("Terjadi Kesalahan.")
 	}
 
-	return data["dlink"].(string)
+	return data["dlink"].(string), nil
 }
