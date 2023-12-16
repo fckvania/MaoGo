@@ -22,7 +22,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var self bool = true
+var self bool = false
 
 func init() {
 	gotenv.Load()
