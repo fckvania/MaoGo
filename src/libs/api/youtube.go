@@ -65,6 +65,9 @@ func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
 
 	for _, dat := range data["links"].(map[string]interface{})["mp3"].(map[string]interface{}) {
 		a := dat.(map[string]interface{})
+		if a["f"].(string) != "mp3" {
+			continue
+		}
 		link.Audio = append(link.Audio, typings.YoutubeAV{
 			Size:    a["size"].(string),
 			Format:  a["f"].(string),
@@ -77,6 +80,9 @@ func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
 
 	for _, dat := range data["links"].(map[string]interface{})["mp4"].(map[string]interface{}) {
 		a := dat.(map[string]interface{})
+		if a["f"].(string) != "mp4" {
+			continue
+		}
 		link.Video = append(link.Video, typings.YoutubeAV{
 			Size:    a["size"].(string),
 			Format:  a["f"].(string),
@@ -115,6 +121,10 @@ func Download(id string, k string) string {
 	var data map[string]interface{}
 	err = json.Unmarshal(body, &data)
 	if err != nil {
+		return ""
+	}
+
+	if data["dlink"] == nil {
 		return ""
 	}
 
