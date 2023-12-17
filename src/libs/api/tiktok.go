@@ -37,7 +37,7 @@ func GetTiktokVideo(url string) (string, error) {
 	data := strings.Split(location, "/")
 	data = data[5:]
 
-	if len(data) < 2 {
+	if len(data[0]) < 10 {
 		return "", errors.New("Url Invalid")
 	}
 
