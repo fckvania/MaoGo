@@ -64,7 +64,7 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		IsGroup:     mess.Info.IsGroup,
 		Querry:      strings.Join(strings.Split(command, " ")[1:], ` `),
 		Body:        command,
-		Command:     strings.Split(command, " ")[0],
+		Command:     strings.ToLower(strings.Split(command, " ")[0]),
 		Media:       media,
 		IsImage: func() bool {
 			if mess.Message.GetImageMessage() != nil {

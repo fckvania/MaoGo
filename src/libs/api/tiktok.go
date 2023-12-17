@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var tiktokRegexp = regexp.MustCompile(`(https:\/\/vt\.tiktok\.com\/[A-Za-z0-9]+\/)|(https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/[0-9]+)`)
+var tiktokRegexp = regexp.MustCompile(`(https:\/\/vm\.tiktok\.com\/[A-Za-z0-9]+\/)|(https:\/\/vt\.tiktok\.com\/[A-Za-z0-9]+\/)|(https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/[0-9]+)`)
 
 func isTiktokUrl(url string) bool {
 	return tiktokRegexp.MatchString(url)
