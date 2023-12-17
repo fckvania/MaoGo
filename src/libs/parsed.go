@@ -36,10 +36,12 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		command = pe
 	}
 
-	if quotedMsg != nil && (quotedMsg.ImageMessage != nil || quotedMsg.VideoMessage != nil) {
+	if quotedMsg != nil && (quotedMsg.ImageMessage != nil || quotedMsg.VideoMessage != nil || quotedMsg.StickerMessage != nil) {
 		if msg := quotedMsg.GetImageMessage(); msg != nil {
 			media = msg
 		} else if msg := quotedMsg.GetVideoMessage(); msg != nil {
+			media = msg
+		} else if msg := quotedMsg.GetStickerMessage(); msg != nil {
 			media = msg
 		}
 	} else if mess.Message != nil && (mess.Message.ImageMessage != nil || mess.Message.VideoMessage != nil) {
@@ -93,6 +95,13 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		},
 		IsQuotedImage: func() bool {
 			if quotedMsg.GetImageMessage() != nil {
+				return true
+			} else {
+				return false
+			}
+		}(),
+		IsQuotedSticker: func() bool {
+			if quotedMsg.GetStickerMessage() != nil {
 				return true
 			} else {
 				return false

@@ -27,22 +27,23 @@ type ICommand struct {
 }
 
 type IMessage struct {
-	From          types.JID
-	IsBot         bool
-	Sender        types.JID
-	OwnerNumber   []string
-	PushName      string
-	IsOwner       bool
-	IsGroup       bool
-	Querry        string
-	Body          string
-	Command       string
-	IsImage       bool
-	IsVideo       bool
-	IsQuotedImage bool
-	IsQuotedVideo bool
-	IsAdmin       bool
-	Media         whatsmeow.DownloadableMessage
-	ContextInfo   *waProto.ContextInfo
-	Reply         func(text string)
+	From            types.JID
+	IsBot           bool
+	Sender          types.JID
+	OwnerNumber     []string
+	PushName        string
+	IsOwner         bool
+	IsGroup         bool
+	Querry          string
+	Body            string
+	Command         string
+	IsImage         bool
+	IsVideo         bool
+	IsQuotedImage   bool
+	IsQuotedVideo   bool
+	IsQuotedSticker bool
+	IsAdmin         bool
+	Media           whatsmeow.DownloadableMessage
+	ContextInfo     *waProto.ContextInfo
+	Reply           func(text string)
 }

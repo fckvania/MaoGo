@@ -19,7 +19,7 @@ func init() {
 			s := api.StickerApi(&typings.Sticker{
 				File: data,
 				Tipe: func() typings.MediaType {
-					if m.IsImage || m.IsQuotedImage {
+					if m.IsImage || m.IsQuotedImage || m.IsQuotedSticker {
 						return typings.IMAGE
 					} else {
 						return typings.VIDEO
