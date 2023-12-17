@@ -37,5 +37,9 @@ func GetTiktokVideo(url string) (string, error) {
 	data := strings.Split(location, "/")
 	data = data[5:]
 
+	if len(data) < 2 {
+		return "", errors.New("Url Invalid")
+	}
+
 	return fmt.Sprintf("https://www.tikwm.com/video/media/play/%s.mp4", data[0][:19]), nil
 }
