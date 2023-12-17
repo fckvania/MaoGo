@@ -1,6 +1,8 @@
 package commands
 
-import "mao/src/libs"
+import (
+	"mao/src/libs"
+)
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
