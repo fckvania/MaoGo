@@ -40,8 +40,9 @@ func init() {
 				for i, v := range ser {
 					D, _ := v.GetDuration()
 					if D < 8*time.Minute {
-						ser = append(ser[:i], ser[i+1:]...)
 						ser = append(ser, v)
+					} else {
+						ser = append(ser[:i], ser[i+1:]...)
 					}
 				}
 				url = ser[rand.Intn(len(ser))].URL
