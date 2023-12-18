@@ -115,7 +115,7 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 		case *events.Message:
 			sock := libs.NewClient(client)
 			m := libs.NewSmsg(v, sock)
-			if !sock.Public && !m.IsOwner {
+			if !helpers.Public && !m.IsOwner {
 				return
 			}
 			go libs.Get(sock, m)

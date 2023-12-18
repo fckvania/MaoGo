@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"mao/src/helpers"
 	"mao/src/libs"
 	"strconv"
 )
@@ -14,11 +15,11 @@ func init() {
 		IsOwner:  true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			if m.Querry == "public" {
-				client.Public = true
-				m.Reply("Public Mode: " + strconv.FormatBool(client.Public))
+				helpers.Public = true
+				m.Reply("Public Mode: " + strconv.FormatBool(helpers.Public))
 			} else {
-				client.Public = false
-				m.Reply("Public Mode: " + strconv.FormatBool(client.Public))
+				helpers.Public = false
+				m.Reply("Public Mode: " + strconv.FormatBool(helpers.Public))
 			}
 		},
 	})
