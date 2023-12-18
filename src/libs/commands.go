@@ -29,7 +29,6 @@ func Get(c *NewClientImpl, m *IMessage) {
 		if reg := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; reg {
 			var cmdWithPref bool
 			var cmdWithoutPref bool
-
 			if cmd.IsPrefix && (prefix != "" && strings.HasPrefix(m.Command, prefix)) {
 				cmdWithPref = true
 			} else {

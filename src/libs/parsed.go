@@ -32,6 +32,8 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		command = pe
 	} else if pe := mess.Message.GetVideoMessage().GetCaption(); pe != "" {
 		command = pe
+	} else if pe := mess.Message.GetConversation(); pe != "" {
+		command = pe
 	}
 
 	if quotedMsg != nil && (quotedMsg.ImageMessage != nil || quotedMsg.VideoMessage != nil || quotedMsg.StickerMessage != nil) {
