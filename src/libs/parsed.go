@@ -21,14 +21,12 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	owner = append(owner, botNum.String())
 
 	for _, own := range owner {
-		if own == mess.Info.Sender.String() {
+		if own == mess.Info.Sender.ToNonAD().String() {
 			isOwner = true
 		}
 	}
 
 	if pe := mess.Message.GetExtendedTextMessage().GetText(); pe != "" {
-		command = pe
-	} else if pe := mess.Message.GetConversation(); pe != "" {
 		command = pe
 	} else if pe := mess.Message.GetImageMessage().GetCaption(); pe != "" {
 		command = pe

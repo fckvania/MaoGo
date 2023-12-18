@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"mao/src/libs"
 	"mao/src/libs/api"
+	"math/rand"
 	"regexp"
+	"time"
+
+	"github.com/Pauloo27/searchtube"
 )
 
 type method string
@@ -16,14 +20,32 @@ const (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "(ytmp4|ytmp3)",
-		As:       []string{"ytmp4", "ytmp3"},
+		Name:     "(ytmp4|ytmp3|play)",
+		As:       []string{"ytmp4", "ytmp3", "play"},
 		Tags:     "downloader",
 		IsPrefix: true,
 		IsQuerry: true,
 		IsWaitt:  true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
-			yt, err := api.YoutubeDL(m.Querry)
+			var url string
+			if api.IsYoutubeURL(m.Querry) {
+				url = m.Querry
+			} else {
+				ser, _ := searchtube.Search(m.Querry, 5)
+				if len(ser) == 0 {
+					m.Reply("Not Found")
+					return
+				}
+				rand.Seed(time.Now().UnixNano())
+				for _, v := range ser {
+					D, _ := v.GetDuration()
+					if D < 8*time.Minute {
+						ser = append(ser, v)
+					}
+				}
+				url = ser[rand.Intn(len(ser))].URL
+			}
+			yt, err := api.YoutubeDL(url)
 			if err != nil {
 				m.Reply(err.Error())
 				return
@@ -31,20 +53,31 @@ func init() {
 
 			caption := fmt.Sprintf("*Title*: %s\n*Author*: %s", yt.Info.Title, yt.Info.Author)
 
-			if reg, _ := regexp.MatchString(`(ytmp3)`, m.Command); reg {
+			if reg, _ := regexp.MatchString(`(ytmp3|play)`, m.Command); reg {
 				build, err := yt.Link.Audio[0].Url()
 				if err != nil {
 					m.Reply(err.Error())
 					return
 				}
-				client.SendDocument(m.From, client.GetBytes(build), fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ID)
+
+				bytes, err := client.GetBytes(build)
+				if err != nil {
+					m.Reply(err.Error())
+					return
+				}
+				client.SendDocument(m.From, bytes, fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ID)
 			} else {
 				build, err := yt.Link.Video[0].Url()
 				if err != nil {
 					m.Reply(err.Error())
 					return
 				}
-				client.SendVideo(m.From, client.GetBytes(build), caption, m.ID)
+				bytes, err := client.GetBytes(build)
+				if err != nil {
+					m.Reply(err.Error())
+					return
+				}
+				client.SendVideo(m.From, bytes, caption, m.ID)
 			}
 		},
 	})

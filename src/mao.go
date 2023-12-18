@@ -24,8 +24,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var Self bool = true
-
 func init() {
 	gotenv.Load()
 	store.DeviceProps.PlatformType = waProto.DeviceProps_SAFARI.Enum()
@@ -117,7 +115,7 @@ func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
 		case *events.Message:
 			sock := libs.NewClient(client)
 			m := libs.NewSmsg(v, sock)
-			if Self && !m.IsOwner {
+			if !sock.Public && !m.IsOwner {
 				return
 			}
 			go libs.Get(sock, m)

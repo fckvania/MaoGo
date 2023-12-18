@@ -7,7 +7,8 @@ import (
 )
 
 type NewClientImpl struct {
-	WA *whatsmeow.Client
+	WA     *whatsmeow.Client
+	Public bool
 }
 
 type ICommand struct {

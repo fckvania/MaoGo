@@ -14,7 +14,7 @@ import (
 
 var youtubeRegex = regexp.MustCompile(`^(https?://)?(www\.)?(youtube\.com|youtu\.be)/.+`)
 
-func isYoutubeURL(url string) bool {
+func IsYoutubeURL(url string) bool {
 	return youtubeRegex.MatchString(url)
 }
 
@@ -27,7 +27,7 @@ func parseSeconds(s string) string {
 }
 
 func YoutubeDL(uri string) (typings.YoutubeInfos, error) {
-	if !isYoutubeURL(uri) {
+	if !IsYoutubeURL(uri) {
 		return typings.YoutubeInfos{}, errors.New("Url Invalid")
 	}
 	params := url.Values{}

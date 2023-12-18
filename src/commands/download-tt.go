@@ -20,7 +20,12 @@ func init() {
 				return
 			}
 
-			client.SendVideo(m.From, client.GetBytes(url), "", nil)
+			bytes, err := client.GetBytes(url)
+			if err != nil {
+				m.Reply(err.Error())
+				return
+			}
+			client.SendVideo(m.From, bytes, "", nil)
 		},
 	})
 }

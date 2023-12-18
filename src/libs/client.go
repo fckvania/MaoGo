@@ -1,9 +1,13 @@
 package libs
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"strings"
 
@@ -129,6 +133,55 @@ func (client *NewClientImpl) SendDocument(from types.JID, data []byte, fileName 
 	return ok, nil
 }
 
+func (client *NewClientImpl) UploadImage(data []byte) (string, error) {
+	bodyy := &bytes.Buffer{}
+	writer := multipart.NewWriter(bodyy)
+	part, _ := writer.CreateFormFile("file", "file")
+	_, err := io.Copy(part, bytes.NewBuffer(data))
+	if err != nil {
+		return "", err
+	}
+	writer.Close()
+
+	// Create request
+	req, err := http.NewRequest("POST", "https://telegra.ph/upload", bodyy)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	// Send request and handle response
+	htt := &http.Client{}
+	resp, err := htt.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("HTTP Error: %d", resp.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var uploads []struct {
+		Path string `json:"src"`
+	}
+	if err := json.Unmarshal(body, &uploads); err != nil {
+		m := map[string]string{}
+		if err := json.Unmarshal(data, &m); err != nil {
+			return "", err
+		}
+		return "", fmt.Errorf("telegraph: %s", m["error"])
+	}
+
+	return "https://telegra.ph/" + uploads[0].Path, nil
+}
+
 func (client *NewClientImpl) ParseJID(arg string) (types.JID, bool) {
 	if arg[0] == '+' {
 		arg = arg[1:]
@@ -181,16 +234,16 @@ func (client *NewClientImpl) SendSticker(jid types.JID, data []byte, opts *waPro
 	})
 }
 
-func (client *NewClientImpl) GetBytes(url string) []byte {
+func (client *NewClientImpl) GetBytes(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		return []byte{}, err
 	}
 
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		return []byte{}, err
 	}
 
-	return bytes
+	return bytes, nil
 }

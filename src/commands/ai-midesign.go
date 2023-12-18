@@ -20,8 +20,11 @@ func init() {
 				return
 			}
 
-			buffer := client.GetBytes(data["image_urls_thumbnail"].([]interface{})[0].(map[string]interface{})["ImageUrl"].(string))
-
+			buffer, err := client.GetBytes(data["image_urls_thumbnail"].([]interface{})[0].(map[string]interface{})["ImageUrl"].(string))
+			if err != nil {
+				m.Reply(err.Error())
+				return
+			}
 			client.SendImage(m.From, buffer, m.Querry, m.ID)
 		},
 	})
