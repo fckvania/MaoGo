@@ -31,11 +31,7 @@ func init() {
 			if api.IsYoutubeURL(m.Querry) {
 				url = m.Querry
 			} else {
-				ser, _ := searchtube.Search(m.Querry, 5)
-				if len(ser) == 0 {
-					m.Reply("Not Found")
-					return
-				}
+				ser, _ := searchtube.Search(m.Querry, 10)
 				rand.Seed(time.Now().UnixNano())
 				for i, v := range ser {
 					D, _ := v.GetDuration()
@@ -44,6 +40,10 @@ func init() {
 					} else {
 						ser = append(ser[:i], ser[i+1:]...)
 					}
+				}
+				if len(ser) == 0 {
+					m.Reply("Not Found")
+					return
 				}
 				url = ser[rand.Intn(len(ser))].URL
 			}
