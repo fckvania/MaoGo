@@ -25,9 +25,8 @@ func init() {
 
 			if h.IsObject() {
 				var data interface{}
-				if r, err := vm.Run("JSON.stringify(" + m.Querry + ")"); err != nil {
-					json.Unmarshal([]byte(r.String()), &data)
-				}
+				h, _ := vm.Run("JSON.stringify(" + m.Querry + ")")
+				json.Unmarshal([]byte(h.String()), &data)
 				pe, _ := json.MarshalIndent(data, "", "  ")
 				m.Reply(string(pe))
 			} else {
