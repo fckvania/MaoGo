@@ -35,9 +35,7 @@ func init() {
 				rand.Seed(time.Now().UnixNano())
 				for i, v := range ser {
 					D, _ := v.GetDuration()
-					if D < 8*time.Minute {
-						ser = append(ser, v)
-					} else {
+					if D >= 8*time.Minute {
 						ser = append(ser[:i], ser[i+1:]...)
 					}
 				}
