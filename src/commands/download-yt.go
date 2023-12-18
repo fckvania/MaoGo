@@ -32,18 +32,18 @@ func init() {
 				url = m.Querry
 			} else {
 				ser, _ := searchtube.Search(m.Querry, 10)
-				rand.Seed(time.Now().UnixNano())
-				for i, v := range ser {
-					D, _ := v.GetDuration()
-					if D >= 8*time.Minute {
-						ser = append(ser[:i], ser[i+1:]...)
-					}
-				}
 				if len(ser) == 0 {
 					m.Reply("Not Found")
 					return
 				}
-				url = ser[rand.Intn(len(ser))].URL
+				rand.Seed(time.Now().UnixNano())
+				data := ser[rand.Intn(len(ser))]
+				d, _ := data.GetDuration()
+				if d > 8*time.Minute {
+					m.Reply("Video is too long")
+					return
+				}
+				url = data.URL
 			}
 			yt, err := api.YoutubeDL(url)
 			if err != nil {
