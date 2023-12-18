@@ -22,7 +22,7 @@ func init() {
 
 			buffer := client.GetBytes(data["image_urls_thumbnail"].([]interface{})[0].(map[string]interface{})["ImageUrl"].(string))
 
-			client.SendImage(m.From, buffer, m.Querry, m.ContextInfo)
+			client.SendImage(m.From, buffer, m.Querry, m.ID)
 		},
 	})
 }

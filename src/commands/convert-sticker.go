@@ -39,7 +39,7 @@ func init() {
 				}(),
 			})
 
-			client.SendSticker(m.From, s.Build(), m.ContextInfo)
+			client.SendSticker(m.From, s.Build(), m.ID)
 
 		},
 	})

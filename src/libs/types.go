@@ -44,6 +44,7 @@ type IMessage struct {
 	IsQuotedSticker bool
 	IsAdmin         bool
 	Media           whatsmeow.DownloadableMessage
-	ContextInfo     *waProto.ContextInfo
+	ID              *waProto.ContextInfo
+	QuotedMsg       *waProto.ContextInfo
 	Reply           func(text string)
 }

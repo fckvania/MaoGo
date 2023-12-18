@@ -88,7 +88,8 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 			}
 			return false
 		}(),
-		ContextInfo: &waProto.ContextInfo{
+		QuotedMsg: mess.Message.GetExtendedTextMessage().GetContextInfo(),
+		ID: &waProto.ContextInfo{
 			StanzaId:      &mess.Info.ID,
 			Participant:   proto.String(mess.Info.Sender.String()),
 			QuotedMessage: mess.Message,

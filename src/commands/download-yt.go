@@ -37,14 +37,14 @@ func init() {
 					m.Reply(err.Error())
 					return
 				}
-				client.SendDocument(m.From, client.GetBytes(build), fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ContextInfo)
+				client.SendDocument(m.From, client.GetBytes(build), fmt.Sprintf("%s.mp3", yt.Info.Title), caption, m.ID)
 			} else {
 				build, err := yt.Link.Video[0].Url()
 				if err != nil {
 					m.Reply(err.Error())
 					return
 				}
-				client.SendVideo(m.From, client.GetBytes(build), caption, m.ContextInfo)
+				client.SendVideo(m.From, client.GetBytes(build), caption, m.ID)
 			}
 		},
 	})

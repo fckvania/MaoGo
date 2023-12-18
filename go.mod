@@ -14,6 +14,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
+	github.com/robertkrimen/otto v0.2.1 // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.2.1 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
