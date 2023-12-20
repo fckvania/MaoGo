@@ -28,10 +28,11 @@ var jRoom = make(map[string]IJadibot)
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "(jadibot|stopjadibot)",
-		As:       []string{"jadibot", "stopjadibot"},
-		Tags:     "main",
-		IsPrefix: true,
+		Name:      "(jadibot|stopjadibot)",
+		As:        []string{"jadibot", "stopjadibot"},
+		Tags:      "main",
+		IsPrefix:  true,
+		IsPrivate: true,
 		After: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			if queque[m.Sender.ToNonAD().String()] && strings.Contains(m.QuotedMsg.GetStanzaId(), "JBOT") {
 				pattern := regexp.MustCompile(`[1-2]`)
