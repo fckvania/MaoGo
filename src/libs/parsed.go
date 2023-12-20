@@ -15,10 +15,8 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 	var media whatsmeow.DownloadableMessage
 	var isOwner = false
 	var owner []string
-	botNum, _ := sock.ParseJID(sock.WA.Store.ID.User)
 	quotedMsg := mess.Message.GetExtendedTextMessage().GetContextInfo().GetQuotedMessage()
 	owner = append(owner, os.Getenv("Owner_Number"))
-	owner = append(owner, botNum.String())
 
 	for _, own := range owner {
 		if own == mess.Info.Sender.ToNonAD().String() {
