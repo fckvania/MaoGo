@@ -25,30 +25,24 @@ func NewHandler(container *sqlstore.Container) *IHandler {
 	}
 }
 
-func (h *IHandler) Client() *whatsmeow.Client {
+func (h *IHandler) Client(jbot ...bool) *whatsmeow.Client {
 	clientLog := waLog.Stdout("lient", "ERROR", true)
 	client := whatsmeow.NewClient(h.Container, clientLog)
-	client.AddEventHandler(h.RegisterHandler(client))
+	client.AddEventHandler(h.RegisterHandler(client, jbot...))
 	return client
 }
 
-func (h *IHandler) RegisterHandler(client *whatsmeow.Client) func(evt interface{}) {
+func (h *IHandler) RegisterHandler(client *whatsmeow.Client, jbot ...bool) func(evt interface{}) {
 	return func(evt interface{}) {
 		sock := NewClient(client)
 		switch v := evt.(type) {
 		case *events.Message:
-			m := NewSmsg(v, sock)
+			m := NewSmsg(v, sock, jbot...)
 			if !helpers.Public && !m.IsOwner {
 				return
 			}
 			go Get(sock, m)
 			return
-		case *events.LoggedOut:
-			con := evt.(*events.LoggedOut)
-			if !con.OnConnect {
-				return
-			}
-			break
 		case *events.Connected, *events.PushNameSetting:
 			if len(client.Store.PushName) == 0 {
 				return

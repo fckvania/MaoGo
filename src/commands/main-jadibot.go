@@ -50,7 +50,7 @@ func init() {
 						panic(err)
 					}
 					handler := libs.NewHandler(container)
-					conn := handler.Client()
+					conn := handler.Client(true)
 					conn.AddEventHandler(func(evt interface{}) {
 						switch evt.(type) {
 						case *events.LoggedOut:

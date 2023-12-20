@@ -20,6 +20,7 @@ func init() {
 				m.Reply("Url Invalid")
 				return
 			}
+
 			key, err := client.WA.GetNewsletterInfoWithInvite(strings.Split(m.Querry, "/")[4])
 			if err != nil {
 				m.Reply("Mao Tidak Tau Ya.")
