@@ -54,6 +54,10 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 		media = nil
 	}
 
+	if strings.HasPrefix(command, "@"+sock.WA.Store.ID.ToNonAD().User) {
+		command = strings.Trim(strings.Replace(command, "@"+sock.WA.Store.ID.ToNonAD().User, "", 1), " ")
+	}
+
 	return &IMessage{
 		From:        mess.Info.Chat,
 		Sender:      mess.Info.Sender,
