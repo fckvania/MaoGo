@@ -34,6 +34,9 @@ func init() {
 		IsPrefix:  true,
 		IsPrivate: true,
 		After: func(client *libs.NewClientImpl, m *libs.IMessage) {
+			if m.IsGroup {
+				return
+			}
 			if queque[m.Sender.ToNonAD().String()] && strings.Contains(m.QuotedMsg.GetStanzaId(), "JBOT") {
 				pattern := regexp.MustCompile(`[1-2]`)
 				delete(queque, m.Sender.ToNonAD().String())
