@@ -46,5 +46,5 @@ type IMessage struct {
 	Media           whatsmeow.DownloadableMessage
 	ID              *waProto.ContextInfo
 	QuotedMsg       *waProto.ContextInfo
-	Reply           func(text string)
+	Reply           func(text string, opts ...whatsmeow.SendRequestExtra) (whatsmeow.SendResponse, error)
 }

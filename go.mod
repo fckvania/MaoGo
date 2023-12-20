@@ -20,6 +20,7 @@ require (
 	github.com/klauspost/compress v1.10.4 // indirect
 	github.com/lithdew/bytesutil v0.0.0-20200409052507-d98389230a59 // indirect
 	github.com/lithdew/nicehttp v0.0.0-20200422123956-0d3d3dd9b482 // indirect
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.2.1 // indirect
 	golang.org/x/crypto v0.16.0 // indirect

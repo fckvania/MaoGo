@@ -26,7 +26,7 @@ func Get(c *NewClientImpl, m *IMessage) {
 			cmd.After(c, m)
 		}
 		re := regexp.MustCompile(`^` + cmd.Name + `$`)
-		if reg := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; reg {
+		if valid := len(re.FindAllString(strings.ReplaceAll(m.Command, prefix, ""), -1)) > 0; valid {
 			var cmdWithPref bool
 			var cmdWithoutPref bool
 			if cmd.IsPrefix && (prefix != "" && strings.HasPrefix(m.Command, prefix)) {

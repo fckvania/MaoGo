@@ -108,12 +108,12 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl) *IMessage {
 				return false
 			}
 		}(),
-		Reply: func(text string) {
-			sock.SendText(mess.Info.Chat, text, &waProto.ContextInfo{
+		Reply: func(text string, opts ...whatsmeow.SendRequestExtra) (whatsmeow.SendResponse, error) {
+			return sock.SendText(mess.Info.Chat, text, &waProto.ContextInfo{
 				StanzaId:      &mess.Info.ID,
 				Participant:   proto.String(mess.Info.Sender.String()),
 				QuotedMessage: mess.Message,
-			})
+			}, opts...)
 		},
 	}
 }

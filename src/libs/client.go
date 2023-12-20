@@ -3,6 +3,9 @@ package libs
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,7 +13,9 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strings"
+	"time"
 
+	"go.mau.fi/util/random"
 	"go.mau.fi/whatsmeow"
 	waProto "go.mau.fi/whatsmeow/binary/proto"
 	"go.mau.fi/whatsmeow/types"
@@ -23,13 +28,13 @@ func NewClient(client *whatsmeow.Client) *NewClientImpl {
 	}
 }
 
-func (client *NewClientImpl) SendText(from types.JID, txt string, opts *waProto.ContextInfo) (whatsmeow.SendResponse, error) {
+func (client *NewClientImpl) SendText(from types.JID, txt string, opts *waProto.ContextInfo, optn ...whatsmeow.SendRequestExtra) (whatsmeow.SendResponse, error) {
 	ok, er := client.WA.SendMessage(context.Background(), from, &waProto.Message{
 		ExtendedTextMessage: &waProto.ExtendedTextMessage{
 			Text:        proto.String(txt),
 			ContextInfo: opts,
 		},
-	})
+	}, optn...)
 	if er != nil {
 		return whatsmeow.SendResponse{}, er
 	}
@@ -133,6 +138,18 @@ func (client *NewClientImpl) SendDocument(from types.JID, data []byte, fileName 
 	return ok, nil
 }
 
+func (client *NewClientImpl) DeleteMsg(from types.JID, id string, me bool) {
+	client.WA.SendMessage(context.Background(), from, &waProto.Message{
+		ProtocolMessage: &waProto.ProtocolMessage{
+			Type: waProto.ProtocolMessage_REVOKE.Enum(),
+			Key: &waProto.MessageKey{
+				FromMe: proto.Bool(me),
+				Id:     proto.String(id),
+			},
+		},
+	})
+}
+
 func (client *NewClientImpl) UploadImage(data []byte) (string, error) {
 	bodyy := &bytes.Buffer{}
 	writer := multipart.NewWriter(bodyy)
@@ -197,6 +214,14 @@ func (client *NewClientImpl) ParseJID(arg string) (types.JID, bool) {
 		}
 		return recipient, true
 	}
+}
+
+func (cli *NewClientImpl) GenerateMessageID(cust string) types.MessageID {
+	data := make([]byte, 8, 8+20+16)
+	binary.BigEndian.PutUint64(data, uint64(time.Now().Unix()))
+	data = append(data, random.Bytes(16)...)
+	hash := sha256.Sum256(data)
+	return cust + strings.ToUpper(hex.EncodeToString(hash[:12])) + "NM4O"
 }
 
 func (client *NewClientImpl) FetchGroupAdmin(Jid types.JID) ([]string, error) {

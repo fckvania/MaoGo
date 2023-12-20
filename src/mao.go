@@ -19,7 +19,6 @@ import (
 	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	"go.mau.fi/whatsmeow/types"
-	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
 	"google.golang.org/protobuf/proto"
 )
@@ -38,16 +37,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	deviceStore, err := container.GetFirstDevice()
-	if err != nil {
-		panic(err)
-	}
-	clientLog := waLog.Stdout("Client", "ERROR", true)
-	client := whatsmeow.NewClient(deviceStore, clientLog)
-	handler := registerHandler(client)
+	handler := libs.NewHandler(container)
 	log.Info("Connecting Socket")
-	client.AddEventHandler(handler)
-
+	client := handler.Client()
 	client.PrePairCallback = func(jid types.JID, platform, businessName string) bool {
 		log.Info("Connected Socket")
 		return true
@@ -107,34 +99,6 @@ func main() {
 	<-c
 
 	client.Disconnect()
-}
-
-func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
-	return func(evt interface{}) {
-		switch v := evt.(type) {
-		case *events.Message:
-			sock := libs.NewClient(client)
-			m := libs.NewSmsg(v, sock)
-			if !helpers.Public && !m.IsOwner {
-				return
-			}
-			go libs.Get(sock, m)
-			return
-		case *events.LoggedOut:
-			con := evt.(*events.LoggedOut)
-			if !con.OnConnect {
-				fmt.Println(client.Store.ID.User)
-				log.Info("LogOut Reason : " + con.Reason.String())
-				panic("Log Out")
-			}
-			break
-		case *events.Connected, *events.PushNameSetting:
-			if len(client.Store.PushName) == 0 {
-				return
-			}
-			client.SendPresence(types.PresenceAvailable)
-		}
-	}
 }
 
 func questLogin() int {
