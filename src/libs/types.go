@@ -22,6 +22,7 @@ type ICommand struct {
 	IsGroup     bool
 	IsAdmin     bool
 	IsWaitt     bool
+	IsPrivate   bool
 	After       func(client *NewClientImpl, m *IMessage)
 	Exec        func(client *NewClientImpl, m *IMessage)
 }

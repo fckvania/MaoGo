@@ -65,6 +65,11 @@ func Get(c *NewClientImpl, m *IMessage) {
 				continue
 			}
 
+			if cmd.IsPrivate && m.IsGroup {
+				m.Reply("Hanya Khusus Private")
+				continue
+			}
+
 			if (m.IsGroup && cmd.IsAdmin) && !m.IsAdmin {
 				m.Reply("Hanya Khusus Admin")
 				continue
