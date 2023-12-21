@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"mao/src/libs"
 	"mao/src/libs/api"
-	"math/rand"
 	"regexp"
 	"time"
 
@@ -36,14 +35,13 @@ func init() {
 					m.Reply("Not Found")
 					return
 				}
-				rand.Seed(time.Now().UnixNano())
-				data := ser[rand.Intn(len(ser))]
-				d, _ := data.GetDuration()
-				if d > 8*time.Minute {
-					m.Reply("Video is too long")
-					return
+				for _, v := range ser {
+					d, _ := v.GetDuration()
+					if d < 8*time.Minute {
+						url = v.URL
+						break
+					}
 				}
-				url = data.URL
 			}
 			yt, err := api.YoutubeDL(url)
 			if err != nil {
