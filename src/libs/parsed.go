@@ -93,6 +93,21 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl, jdbot ...bool) *IMessage
 			}
 			return false
 		}(),
+		IsBotAdmin: func() bool {
+			if !mess.Info.IsGroup {
+				return false
+			}
+			admin, err := sock.FetchGroupAdmin(mess.Info.Chat)
+			if err != nil {
+				return false
+			}
+			for _, v := range admin {
+				if v == sock.WA.Store.ID.ToNonAD().String() {
+					return true
+				}
+			}
+			return false
+		}(),
 		QuotedMsg: mess.Message.GetExtendedTextMessage().GetContextInfo(),
 		ID: &waProto.ContextInfo{
 			StanzaId:      &mess.Info.ID,

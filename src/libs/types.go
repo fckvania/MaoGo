@@ -21,6 +21,7 @@ type ICommand struct {
 	IsQuerry    bool
 	IsGroup     bool
 	IsAdmin     bool
+	IsBotAdmin  bool
 	IsWaitt     bool
 	IsPrivate   bool
 	After       func(client *NewClientImpl, m *IMessage)
@@ -44,6 +45,7 @@ type IMessage struct {
 	IsQuotedVideo   bool
 	IsQuotedSticker bool
 	IsAdmin         bool
+	IsBotAdmin      bool
 	Media           whatsmeow.DownloadableMessage
 	ID              *waProto.ContextInfo
 	QuotedMsg       *waProto.ContextInfo

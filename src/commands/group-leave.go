@@ -13,6 +13,7 @@ func init() {
 		IsPrefix: true,
 		IsWaitt:  true,
 		IsOwner:  true,
+		IsGroup:  true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			err := client.WA.LeaveGroup(m.From)
 			if err != nil {

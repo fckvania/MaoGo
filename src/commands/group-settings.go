@@ -9,13 +9,14 @@ import (
 func init() {
 	libs.NewCommands(&libs.ICommand{
 		Name:     "(opengc|opengroup|closegc|closegroup)",
-		As:       []string{"opengc", "opengroup", "closegc", "closegroup"},
+		As:       []string{"opengc", "closegc"},
 		Tags:     "group",
 		IsPrefix: true,
 		IsWaitt:  true,
 		IsAdmin:  true,
+		IsGroup:  true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
-			err := client.WA.SetGroupAnnounce(m.From, strings.Contains(m.Command, "open"))
+			err := client.WA.SetGroupLocked(m.From, strings.Contains(m.Command, "close"))
 			if err != nil {
 				m.Reply("Error")
 				fmt.Println(err.Error())

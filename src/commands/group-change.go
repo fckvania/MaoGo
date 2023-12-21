@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"mao/src/libs"
+	"regexp"
 	"strings"
 
 	"github.com/nyaruka/phonenumbers"
@@ -12,12 +13,13 @@ import (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "(demote|dm)",
-		As:       []string{"demote"},
-		Tags:     "group",
-		IsPrefix: true,
-		IsGroup:  true,
-		IsAdmin:  true,
+		Name:       "(demote|dm|promote|pm)",
+		As:         []string{"demote", "promote"},
+		Tags:       "group",
+		IsPrefix:   true,
+		IsGroup:    true,
+		IsAdmin:    true,
+		IsBotAdmin: true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			var ujid []types.JID
 			var ok error
@@ -37,7 +39,6 @@ func init() {
 					jid, _ := types.ParseJID(*m.QuotedMsg.Participant)
 					ujid = append(ujid, jid)
 				}
-
 			} else if len(m.Querry) > 0 {
 				ajid := strings.Split(strings.Trim(m.Querry, " "), ",")
 				ujid = make([]types.JID, len(ajid))
@@ -54,15 +55,40 @@ func init() {
 				}
 			}
 			if ujid == nil || len(ujid) == 0 {
-				m.Reply("Tag atau balas pesan seseorang yang mau diturunkan menjadi anggota")
+				m.Reply("Tag atau balas pesan seseorang yang mau dijadikan admin/dijatuhkan dari admin.")
 				return
 			}
-			_, err := client.WA.UpdateGroupParticipants(m.From, ujid, whatsmeow.ParticipantChangeDemote)
-			if err != nil {
-				m.Reply("Mao gagal menjadikan user tersebut :(\nsilankan cek kembali nomor tersebut")
-				return
+
+			if regexp.MustCompile(`demote|dm`).MatchString(m.Command) {
+				resp, err := client.WA.UpdateGroupParticipants(m.From, ujid, whatsmeow.ParticipantChangeDemote)
+				if err != nil {
+					m.Reply("Gagal menurunkan admin")
+					return
+				}
+
+				for _, item := range resp {
+					if item.Error == 404 {
+						m.Reply("Mungkin user tersebut sudah tidak ada di grup ini.")
+					} else if !item.IsAdmin {
+						m.Reply("Sukses menurunkan admin")
+					}
+				}
+			} else {
+				resp, err := client.WA.UpdateGroupParticipants(m.From, ujid, whatsmeow.ParticipantChangePromote)
+				if err != nil {
+					m.Reply("Gagal menjadikan admin")
+					return
+				}
+
+				for _, item := range resp {
+					if item.IsAdmin {
+						m.Reply("Sukses menjadikan admin")
+					}
+					if item.Error == 404 {
+						m.Reply("Mungkin user tersebut sudah tidak ada di grup ini.")
+					}
+				}
 			}
-			m.Reply("Berhasil kak")
 		},
 	})
 }

@@ -6,17 +6,19 @@ import (
 
 func init() {
 	libs.NewCommands(&libs.ICommand{
-		Name:     "(setdesc|setdeskripsi|setdesk)",
-		As:       []string{"setdesc", "setdeskripsi"},
-		Tags:     "group",
-		IsPrefix: true,
-		IsWaitt:  true,
-		IsQuerry: true,
-		IsAdmin:  true,
+		Name:       "(setdesc|setdeskripsi|setdesk)",
+		As:         []string{"setdesc"},
+		Tags:       "group",
+		IsPrefix:   true,
+		IsWaitt:    true,
+		IsQuerry:   true,
+		IsAdmin:    true,
+		IsGroup:    true,
+		IsBotAdmin: true,
 		Exec: func(client *libs.NewClientImpl, m *libs.IMessage) {
 			err := client.WA.SetGroupTopic(m.From, "", "", m.Querry)
 			if err != nil {
-				m.Reply("Mao gagal mengubah deskripsi group")
+				m.Reply("Gagal mengubah deskripsi group")
 				return
 			}
 			m.Reply("Berhasil mengubah deskripsi group")

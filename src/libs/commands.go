@@ -75,6 +75,11 @@ func Get(c *NewClientImpl, m *IMessage) {
 				continue
 			}
 
+			if (m.IsGroup && cmd.IsBotAdmin) && !m.IsBotAdmin {
+				m.Reply("Jadikan Bot Sebagai Admin")
+				continue
+			}
+
 			if cmd.IsWaitt {
 				m.Reply("Tunggu Sebentar Ya")
 			}
