@@ -71,6 +71,8 @@ func NewSmsg(mess *events.Message, sock *NewClientImpl, jdbot ...bool) *IMessage
 		Body:        command,
 		Command:     strings.ToLower(strings.Split(command, " ")[0]),
 		Media:       media,
+		Message:     mess.Message,
+		StanzaId:    mess.Info.ID,
 		IsImage: func() bool {
 			if mess.Message.GetImageMessage() != nil {
 				return true

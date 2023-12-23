@@ -25,7 +25,7 @@ func init() {
 				m.Reply(err.Error())
 				return
 			}
-			client.SendVideo(m.From, bytes, "", nil)
+			client.SendVideo(m.From, bytes, "", m.ID)
 		},
 	})
 }

@@ -45,6 +45,9 @@ func Get(c *NewClientImpl, m *IMessage) {
 				continue
 			}
 
+			//Read Command
+			//c.WA.MarkRead([]string{m.StanzaId}, time.Now(), m.From, m.Sender)
+
 			//Checking
 			if cmd.IsOwner && !m.IsOwner {
 				continue

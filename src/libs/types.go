@@ -34,6 +34,7 @@ type IMessage struct {
 	Sender          types.JID
 	OwnerNumber     []string
 	PushName        string
+	StanzaId        string
 	IsOwner         bool
 	IsGroup         bool
 	Querry          string
@@ -49,5 +50,6 @@ type IMessage struct {
 	Media           whatsmeow.DownloadableMessage
 	ID              *waProto.ContextInfo
 	QuotedMsg       *waProto.ContextInfo
+	Message         *waProto.Message
 	Reply           func(text string, opts ...whatsmeow.SendRequestExtra) (whatsmeow.SendResponse, error)
 }

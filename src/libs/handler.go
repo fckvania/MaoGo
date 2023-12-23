@@ -2,6 +2,7 @@ package libs
 
 import (
 	"mao/src/helpers"
+	"time"
 
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store"
@@ -41,6 +42,9 @@ func (h *IHandler) RegisterHandler(client *whatsmeow.Client, jbot ...bool) func(
 			if !helpers.Public && !m.IsOwner {
 				return
 			}
+			// Read message
+			sock.WA.MarkRead([]string{m.StanzaId}, time.Now(), m.From, m.Sender)
+			// Get command
 			go Get(sock, m)
 			return
 		case *events.Connected, *events.PushNameSetting:
