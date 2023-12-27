@@ -1,0 +1,1 @@
+web: go get all;go run src/mao.go
