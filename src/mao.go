@@ -127,6 +127,10 @@ func questLogin() int {
 }
 
 func HttpStatic(client *whatsmeow.Client) {
+	var port string = os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	var filepath = path.Join("static/views", "index.html")
 	var tmpl, _ = template.ParseFiles(filepath)
 	http.HandleFunc("/index", func(w http.ResponseWriter, r *http.Request) {
@@ -142,6 +146,6 @@ func HttpStatic(client *whatsmeow.Client) {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/index", http.StatusTemporaryRedirect)
 	})
-	fmt.Println("server started at localhost:9000")
-	http.ListenAndServe(":9000", nil)
+	fmt.Println("server started at localhost:" + port)
+	http.ListenAndServe(":"+port, nil)
 }
